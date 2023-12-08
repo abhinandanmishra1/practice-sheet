@@ -12,7 +12,7 @@ const problemRoutes = require("./Routes/ProblemRoutes");
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: "http://localhost:5173"
+  origin: process.env.CLIENT_URL || "http://localhost:5173"
 }));
 
 app.listen(PORT, async () => {
