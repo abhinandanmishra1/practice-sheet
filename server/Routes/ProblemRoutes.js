@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
+        console.log("called")
         const result = await fetchProblems();
         return res.send(result);
     } catch (error) {

@@ -29,12 +29,14 @@ const fetchProblems = async (offset = 0, limit = 10) => {
     },
   ]);
 
+  console.log(result)
+
   return {
     page: {
-      total: result[0].total[0].total,
+      total: result?.[0]?.total?.[0]?.total || [0],
       limit
     },
-    problems: result[0].data
+    problems: result?.[0]?.data || []
   };
 };
 
