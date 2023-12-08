@@ -11,8 +11,6 @@ export const fetchProblems = async (offset = 0, limit = 10) => {
 
     return data;
   } catch (error) {
-    console.log(error);
-
-    return [];
+    throw("There was some error in loading the problems.")
   }
 };
