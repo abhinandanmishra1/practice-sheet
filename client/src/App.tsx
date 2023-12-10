@@ -1,8 +1,5 @@
-import { useMemo, useState } from "react";
 import "./App.css";
-import { useFetchProblems } from "./hooks/problems";
 import { Table } from "./components/Table";
-import { getProblemLink } from "./helpers/main";
 
 interface Problem {
   name: string;
@@ -10,28 +7,10 @@ interface Problem {
 }
 
 function App() {
-  const { queryResult, setLimit, setOffset } = useFetchProblems();
-
-  const { data, isLoading, error } = queryResult;
-
-  const problems = useMemo(() => {
-    return data?.problems.map((problem: Problem) => {
-      return { ...problem, link: getProblemLink(problem.problemId) };
-    });
-  }, [data?.problems]);
-  console.log(problems);
-
-  if (isLoading) {
-    return <h1>Loading</h1>;
-  }
-
-  if (error) {
-    return <p>Error </p>;
-  }
-
   return (
-    <div className="App">
-      <Table data={problems} />
+    <div className="h-[80dvh] p-4 bg-[#282828] rounded-[8px] text-white w-[90vw] flex flex-col items-center">
+      <h1 className="font-bold">Practice Sheet</h1>
+      <Table />
     </div>
   );
 }

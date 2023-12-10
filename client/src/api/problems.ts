@@ -1,6 +1,6 @@
 import { axios } from "../axiosClient";
 
-export const fetchProblems = async (offset = 0, limit = 10) => {
+export const fetchProblems = async (offset = 0, limit = 20) => {
   try {
     const { data } = await axios.get("/problems", {
       params: {

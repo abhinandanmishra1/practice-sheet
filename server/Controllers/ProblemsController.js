@@ -27,9 +27,7 @@ const fetchProblems = async (offset = 0, limit = 10) => {
         ],
       },
     },
-  ]);
-
-  console.log(result)
+  ]); 
 
   return {
     page: {

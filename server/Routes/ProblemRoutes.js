@@ -4,8 +4,14 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        console.log("called")
-        const result = await fetchProblems();
+        const queryParams = req.query;
+
+        const limit = parseInt(queryParams.limit);
+        const offset = parseInt(queryParams.offset);
+
+        console.log(limit, offset, req.params)
+
+        const result = await fetchProblems(offset, limit);
         return res.send(result);
     } catch (error) {
         return res.status(500).send("Something went wrong");
