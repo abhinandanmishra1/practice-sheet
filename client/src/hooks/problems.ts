@@ -1,19 +1,13 @@
 import { useQuery } from "react-query";
 import { fetchProblems } from "../api/problems";
 import { useState } from "react";
+import { useProblemTableContext } from "../context/ProblemsTableContext/ProblemsTableContext";
 
 export const useFetchProblems = () => {
-  const [limit, setLimit] = useState(10);
-  const [offset, setOffset] = useState(0);
+  const {limit, offset} = useProblemTableContext()
 
-  const queryResult = useQuery({
-    queryKey: ["problems"],
+  return useQuery({
+    queryKey: ["problems", limit, offset],
     queryFn: () => fetchProblems(offset, limit),
   });
-
-  return {
-    setLimit,
-    setOffset,
-    queryResult,
-  };
 };
