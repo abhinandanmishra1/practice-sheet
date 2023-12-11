@@ -16,6 +16,7 @@ interface IProblem {
   name: string;
   link: string;
   completed: boolean;
+  problemId: string;
 }
 
 const PAGE_LIMIT = 10;
@@ -36,6 +37,11 @@ export const Table = () => {
   const page = data?.page || { limit: 10, total: 0 };
 
   const columnHelper = createColumnHelper<IProblem>();
+
+  const toggleComplete = (problemId: string) => {
+    const isChecked = localStorage.getItem(problemId) || "false";
+    localStorage.setItem(problemId, isChecked == "false" ? "true" : "false");
+  }
 
   const columns = useMemo(
     () => [
@@ -58,18 +64,19 @@ export const Table = () => {
         cell: (info) => (
           <div className="flex justify-center">
             <a href={info.getValue()} target="_blank" className="text-blue-500">
-            Open
-          </a>
+              Open
+            </a>
           </div>
         ),
       }),
       columnHelper.accessor("completed", {
         header: "Completed",
-        cell: (info) => (
-          <div className="w-full h-full flex justify-center">
-            <input className="w-4 h-4 text-green-600 bg-gray-100 accent-green-500 rounded" type="checkbox" defaultChecked={info.getValue()} />
+        cell: (info) => {
+          return <div className="w-full h-full flex justify-center">
+            <input onClick={() => toggleComplete(info.row.original.problemId)} className="w-4 h-4 text-green-600 bg-gray-100 accent-green-500 rounded" type="checkbox" defaultChecked={Boolean(localStorage.getItem(info.row.original.problemId))} />
           </div>
-        ),
+        }
+        ,
       }),
     ],
 
@@ -101,9 +108,9 @@ export const Table = () => {
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                 </th>
               ))}
             </tr>
