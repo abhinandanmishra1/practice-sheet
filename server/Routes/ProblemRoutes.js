@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
         console.log(limit, offset, req.params)
 
         const result = await fetchProblems(offset, limit);
+        console.log("yess")
         return res.send(result);
     } catch (error) {
         return res.status(500).send("Something went wrong");

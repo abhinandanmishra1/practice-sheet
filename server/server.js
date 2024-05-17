@@ -8,12 +8,11 @@ require("./db");
 
 // routes imports
 const problemRoutes = require("./Routes/ProblemRoutes");
+const taskRouter = require("./Routes/TaskRouter");
 
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173"
-}));
+app.use(cors());
 
 app.listen(PORT, async () => {
   console.log(`Server is listening on port ${PORT}`);
@@ -25,3 +24,4 @@ app.get("", (req, res) => {
 })
 
 app.use("/problems", problemRoutes);
+// app.use("/tasks", taskRouter);

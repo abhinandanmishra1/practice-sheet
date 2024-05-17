@@ -1,4 +1,4 @@
-const { Problem } = require("../Models/Problems");
+const { Problem } = require("../Models");
 const { problemIds } = require("../Data");
 const { getProblemNameFromId } = require("../Helpers/problemHelper");
 
