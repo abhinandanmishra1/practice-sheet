@@ -9,6 +9,7 @@ export const fetchProblems = async (offset = 0, limit = 20) => {
       },
     });
 
+    console.log(data);
     return data;
   } catch (error) {
     throw("There was some error in loading the problems.")
