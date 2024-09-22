@@ -21,7 +21,7 @@ const fetchProblems = async (offset = 0, limit = 10) => {
           {
             $project: {
               name: 1,
-              problemId: 1,
+              problemLink: 1,
             },
           },
         ],
