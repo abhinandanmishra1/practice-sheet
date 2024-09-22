@@ -16,7 +16,7 @@ interface IProblem {
   name: string;
   link: string;
   completed: boolean;
-  problemId: string;
+  problemLink: string;
 }
 
 const PAGE_LIMIT = 10;
@@ -24,23 +24,15 @@ const PAGE_LIMIT = 10;
 export const Table = () => {
   const { data, isLoading, error } = useFetchProblems();
 
-  const problems = useMemo(() => {
-    return (data?.problems || []).map((problem: Problem) => {
-      return {
-        ...problem,
-        link: getProblemLink(problem.problemId),
-        completed: false,
-      };
-    });
-  }, [data?.problems]);
+  const problems = data?.problems || [];
 
   const page = data?.page || { limit: 10, total: 0 };
 
   const columnHelper = createColumnHelper<IProblem>();
 
-  const toggleComplete = (problemId: string) => {
-    const isChecked = localStorage.getItem(problemId) || "false";
-    localStorage.setItem(problemId, isChecked == "false" ? "true" : "false");
+  const toggleComplete = (problemLink: string) => {
+    const isChecked = localStorage.getItem(problemLink) || "false";
+    localStorage.setItem(problemLink, isChecked == "false" ? "true" : "false");
   }
 
   const columns = useMemo(
@@ -73,7 +65,7 @@ export const Table = () => {
         header: "Completed",
         cell: (info) => {
           return <div className="w-full h-full flex justify-center">
-            <input onClick={() => toggleComplete(info.row.original.problemId)} className="w-4 h-4 text-green-600 bg-gray-100 accent-green-500 rounded" type="checkbox" defaultChecked={Boolean(localStorage.getItem(info.row.original.problemId))} />
+            <input onClick={() => toggleComplete(info.row.original.problemLink)} className="w-4 h-4 text-green-600 bg-gray-100 accent-green-500 rounded" type="checkbox" defaultChecked={Boolean(localStorage.getItem(info.row.original.problemLink))} />
           </div>
         }
         ,
