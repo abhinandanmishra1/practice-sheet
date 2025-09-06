@@ -7,13 +7,16 @@ import { Card } from "@/components/ui/card";
 import { Table as ShadTable, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TABLE_STYLES } from "@/constants/table";
 
-export const Table = () => {
-  const { data, isLoading, error } = useFetchProblems();
+interface TableProps {
+  sheetId: string
+}
+export const Table = ({ sheetId }: TableProps) => {
+  const { data, isLoading, error } = useFetchProblems({ sheetId });
   const problems = data?.problems || [];
   const page = data?.page || { limit: 10, total: 0 };
-  
+
   const table = useProblemsTable(problems, page.total);
-  
+
   if (!table) return null;
 
   if (error) {

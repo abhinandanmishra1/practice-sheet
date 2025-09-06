@@ -1,17 +1,24 @@
 const { Problem } = require("../Models/Problems");
 const { problemIds } = require("../Data");
 const { getProblemNameFromId } = require("../Helpers/problemHelper");
+const { default: mongoose } = require("mongoose");
 
-const fetchProblems = async (userId, offset = 0, limit = 10) => {
+const fetchProblems = async (userId, offset = 0, limit = 10, sheetId = null) => {
+  const matchStage = sheetId
+    ? [{ $match: { sheet: new mongoose.Types.ObjectId(sheetId) } }]
+    : [];
+
   const result = await Problem.aggregate([
     {
       $facet: {
         total: [
+          ...matchStage,
           {
             $count: "total",
           },
         ],
         data: [
+          ...matchStage,
           {
             $skip: offset,
           },

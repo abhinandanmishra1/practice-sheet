@@ -11,8 +11,9 @@ router.get('/', async (req, res) => {
         
         const limit = parseInt(queryParams.limit);
         const offset = parseInt(queryParams.offset);
+        const sheetId = queryParams.sheetId;
 
-        const result = await fetchProblems(req.auth.userId, offset, limit);
+        const result = await fetchProblems(req.auth.userId, offset, limit, sheetId);
         return res.send(result);
     } catch (error) {
         return res.status(500).send("Something went wrong");

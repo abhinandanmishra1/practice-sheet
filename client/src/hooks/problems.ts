@@ -3,14 +3,18 @@ import { useProblemsApi } from "../api/problems";
 import { useProblemTableContext } from "../context/ProblemsTableContext/ProblemsTableContext";
 import { useUser } from "@clerk/clerk-react";
 
-export const useFetchProblems = () => {
+interface UseFetchProblemsProps {
+  sheetId?: string;
+}
+
+export const useFetchProblems = ({ sheetId }: UseFetchProblemsProps = {}) => {
   const { user } = useUser();
   const { limit, offset } = useProblemTableContext();
   const api = useProblemsApi();
 
   const problemsQuery = useQuery({
-    queryKey: ["problems", limit, offset],
-    queryFn: () => api.fetchProblems(offset, limit),
+    queryKey: ["problems", limit, offset, sheetId],
+    queryFn: () => api.fetchProblems(offset, limit, sheetId),
     onError: (error) => {
       console.error("Error fetching problems:", error);
     },

@@ -3,12 +3,13 @@ import { useAxios } from "../axiosClient";
 export const useProblemsApi = () => {
   const axios = useAxios();
 
-  const fetchProblems = async (offset = 0, limit = 20) => {
+  const fetchProblems = async (offset = 0, limit = 20, sheetId?: string) => {
     try {
       const { data } = await axios.get("/problems", {
         params: {
           limit,
           offset,
+          sheetId,
         },
       });
       return data;
