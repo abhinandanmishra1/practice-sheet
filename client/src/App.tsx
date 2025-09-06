@@ -1,17 +1,20 @@
-import "./App.css";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { Table } from "./components/Table";
-
-interface Problem {
-  name: string;
-  problemId: string;
-}
+import { Layout } from "./components/Layout";
 
 function App() {
   return (
-    <div className="h-[80dvh] p-4 bg-[#282828] rounded-[8px] text-white w-[90vw] flex flex-col items-center">
-      <h1 className="font-bold">Practice Sheet</h1>
-      <Table />
-    </div>
+    <Layout>
+      <SignedIn>
+        <Table />
+      </SignedIn>
+      <SignedOut>
+        <div className="text-center py-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Practice Sheet</h2>
+          <p className="text-gray-600">Please sign in to access your practice problems.</p>
+        </div>
+      </SignedOut>
+    </Layout>
   );
 }
 

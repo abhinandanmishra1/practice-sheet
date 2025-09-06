@@ -1,5 +1,7 @@
 import React from "react";
 import { useProblemTableContext } from "../../context/ProblemsTableContext/ProblemsTableContext";
+import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
   setTablePageIndex: (_: number) => void;
@@ -15,83 +17,81 @@ export const Pagination = ({
   pageCount,
 }: PaginationProps) => {
   const { setPageIndex, pageIndex } = useProblemTableContext();
-  const activeClassName =
-    "flex items-center justify-center px-4 h-10 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white";
-  const inactiveClassName =
-    "flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white";
+
+  const handlePrevious = () => {
+    previousPage();
+    setPageIndex((current) => Math.max(current - 1, 0));
+  };
+
+  const handleNext = () => {
+    nextPage();
+    setPageIndex((current: number) => Math.min(pageCount - 1, current + 1));
+  };
+
+  const handlePageClick = (index: number) => {
+    setTablePageIndex(index);
+    setPageIndex((_) => index);
+  };
+
   return (
-    <nav className="mt-4">
-      <ul className="flex items-center -space-x-px h-10 text-base">
-        <li>
-          <button
-            onClick={() => {
-              previousPage();
-              setPageIndex((pageIndex) => Math.max(pageIndex - 1, 0));
-            }}
-            disabled={pageIndex === 0}
-            className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Previous</span>
-            <svg
-              className="w-3 h-3 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 1 1 5l4 4"
-              />
-            </svg>
-          </button>
-        </li>
-        {Array.from({ length: pageCount }, (_, i) => (
-          <li key={crypto.randomUUID()}>
-            <button
-              onClick={() => {
-                setTablePageIndex(i);
-                setPageIndex((_) => i);
-              }}
-              className={i === pageIndex ? activeClassName : inactiveClassName}
-            >
-              {i + 1}
-            </button>
-          </li>
-        ))}
-        <li>
-          <button
-            onClick={() => {
-              setPageIndex((pageIndex: number) =>
-                Math.min(pageCount - 1, pageIndex + 1)
-              );
-              nextPage();
-            }}
-            disabled={pageIndex === pageCount - 1}
-            className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Next</span>
-            <svg
-              className="w-3 h-3 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 9 4-4-4-4"
-              />
-            </svg>
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <div className="flex flex-col items-center justify-center space-y-4 py-6 bg-gray-50/50 rounded-b-xl">
+      <div className="flex items-center gap-2 text-sm text-gray-600">
+        <span>Page {pageIndex + 1} of {pageCount}</span>
+      </div>
+      <div className="flex items-center justify-center space-x-2">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={handlePrevious}
+          disabled={pageIndex === 0}
+          className="h-9 w-9 border-gray-200 hover:bg-gray-100"
+        >
+          <ChevronLeft className="h-5 w-5" />
+          <span className="sr-only">Previous page</span>
+        </Button>
+        <div className="flex items-center gap-1">
+          {Array.from({ length: pageCount }, (_, i) => {
+            // Show first page, last page, and pages around the current page
+            const shouldShow =
+              i === 0 ||
+              i === pageCount - 1 ||
+              Math.abs(i - pageIndex) <= 1;
+
+            if (!shouldShow && Math.abs(i - pageIndex) === 2) {
+              return <span key={i} className="px-1 text-gray-400">...</span>;
+            }
+
+            if (!shouldShow) return null;
+
+            const isActive = i === pageIndex;
+            return (
+              <Button
+                key={i}
+                variant={isActive ? "default" : "outline"}
+                size="sm"
+                onClick={() => handlePageClick(i)}
+                className={`h-9 w-9 text-sm font-medium ${
+                  isActive 
+                    ? "bg-indigo-500 text-white hover:bg-indigo-600" 
+                    : "border-gray-200 text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                {i + 1}
+              </Button>
+            );
+          })}
+        </div>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={handleNext}
+          disabled={pageIndex === pageCount - 1}
+          className="h-9 w-9 border-gray-200 hover:bg-gray-100"
+        >
+          <ChevronRight className="h-5 w-5" />
+          <span className="sr-only">Next page</span>
+        </Button>
+      </div>
+    </div>
   );
 };

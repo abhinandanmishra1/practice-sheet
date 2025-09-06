@@ -1,15 +1,17 @@
 const { fetchProblems } = require('../Controllers/ProblemsController');
+const { requireAuth } = require('@clerk/express');
 const express = require('express');
 const router = express.Router();
+
+router.use(requireAuth())
 
 router.get('/', async (req, res) => {
     try {
         const queryParams = req.query;
+        console.log(req);
 
         const limit = parseInt(queryParams.limit);
         const offset = parseInt(queryParams.offset);
-
-        console.log(limit, offset, req.params)
 
         const result = await fetchProblems(offset, limit);
         return res.send(result);
