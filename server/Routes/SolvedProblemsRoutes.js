@@ -4,10 +4,7 @@ const { requireAuth } = require('@clerk/express');
 const { getSolvedProblems, toggleProblemSolved } = require('../Controllers/SolvedProblemsController');
 
 // All routes require authentication
-router.use(requireAuth);
-
-// Get all solved problems for the authenticated user
-router.get('/', getSolvedProblems);
+router.use(requireAuth());
 
 // Toggle problem solved status
 router.post('/toggle', toggleProblemSolved);

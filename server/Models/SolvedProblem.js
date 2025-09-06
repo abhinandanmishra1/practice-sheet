@@ -2,13 +2,15 @@ const mongoose = require('mongoose');
 
 const solvedProblemSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'User',
-    required: true
+    required: true,
+    index: true
   },
   problemId: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   solvedAt: {
     type: Date,

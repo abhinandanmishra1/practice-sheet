@@ -26,18 +26,8 @@ export const useProblemsApi = () => {
     }
   };
 
-  const getSolvedProblems = async () => {
-    try {
-      const { data } = await axios.get("/solved");
-      return data.solvedProblems;
-    } catch (error) {
-      throw new Error("Failed to fetch solved problems");
-    }
-  };
-
   return {
     fetchProblems,
     toggleProblemSolved,
-    getSolvedProblems
   };
 };

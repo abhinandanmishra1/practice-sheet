@@ -2,7 +2,7 @@ const { Problem } = require("../Models/Problems");
 const { problemIds } = require("../Data");
 const { getProblemNameFromId } = require("../Helpers/problemHelper");
 
-const fetchProblems = async (offset = 0, limit = 10) => {
+const fetchProblems = async (userId, offset = 0, limit = 10) => {
   const result = await Problem.aggregate([
     {
       $facet: {
@@ -19,9 +19,32 @@ const fetchProblems = async (offset = 0, limit = 10) => {
             $limit: limit,
           },
           {
+            $lookup: {
+              from: "solvedproblems",
+              let: { problemId: { $toString: "$_id" } },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        { $eq: ["$problemId", "$$problemId"] },
+                        { $eq: ["$userId", userId] }
+                      ]
+                    }
+                  }
+                }
+              ],
+              as: "solvedStatus"
+            }
+          },
+          {
             $project: {
               name: 1,
               problemLink: 1,
+              sheet: 1,
+              id: "$_id",
+              _id: 0,
+              solved: { $cond: { if: { $gt: [{ $size: "$solvedStatus" }, 0] }, then: true, else: false } }
             },
           },
         ],
@@ -46,8 +69,6 @@ const addProblems = async () => {
 
       return result;
     }, []);
-
-    console.log(problemsData);
 
     await Problem.insertMany(problemsData);
     console.log("Successfully inserted problems");

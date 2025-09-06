@@ -1,8 +1,10 @@
 export interface Problem {
   name: string;
   link: string;
-  completed: boolean;
+  solved: boolean;
   problemLink: string;
+  id: string;
+  sheet: string;
 }
 
 export interface ProblemResponse {
@@ -14,10 +16,10 @@ export interface ProblemResponse {
 }
 
 export interface TableCellProps {
-  isCompleted: boolean;
-  problemLink: string;
-  value: string;
-  onToggle?: () => void;
+  problemLink?: string;
+  value?: string;
+  problemId?: string;
+  isSolved?: boolean;
 }
 
 export interface PaginationProps {

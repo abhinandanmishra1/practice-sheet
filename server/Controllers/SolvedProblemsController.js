@@ -2,7 +2,7 @@ const SolvedProblem = require('../Models/SolvedProblem');
 
 const getSolvedProblems = async (req, res) => {
   try {
-    const solvedProblems = await SolvedProblem.find({ userId: req.user._id });
+    const solvedProblems = await SolvedProblem.find({ userId: req.auth.userId });
     res.json({ solvedProblems: solvedProblems.map(sp => sp.problemId) });
   } catch (error) {
     console.error('Error getting solved problems:', error);
@@ -18,21 +18,21 @@ const toggleProblemSolved = async (req, res) => {
     }
 
     const existingSolved = await SolvedProblem.findOne({
-      userId: req.user._id,
+      userId: req.auth.userId,
       problemId
     });
 
     if (existingSolved) {
       // If problem was already marked as solved, remove it
       await SolvedProblem.deleteOne({ _id: existingSolved._id });
-      res.json({ solved: false, message: 'Problem marked as unsolved' });
+      res.json({ solved: false });
     } else {
       // Mark problem as solved
       await SolvedProblem.create({
-        userId: req.user._id,
+        userId: req.auth.userId,
         problemId
       });
-      res.json({ solved: true, message: 'Problem marked as solved' });
+      res.json({ solved: true });
     }
   } catch (error) {
     console.error('Error toggling problem solved status:', error);

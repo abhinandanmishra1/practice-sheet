@@ -8,12 +8,11 @@ router.use(requireAuth())
 router.get('/', async (req, res) => {
     try {
         const queryParams = req.query;
-        console.log(req);
-
+        
         const limit = parseInt(queryParams.limit);
         const offset = parseInt(queryParams.offset);
 
-        const result = await fetchProblems(offset, limit);
+        const result = await fetchProblems(req.auth.userId, offset, limit);
         return res.send(result);
     } catch (error) {
         return res.status(500).send("Something went wrong");

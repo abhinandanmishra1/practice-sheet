@@ -10,23 +10,15 @@ export const useProblemsTable = (problems: Problem[], totalPages: number) => {
   if (!problems) return;
   const columnHelper = createColumnHelper<Problem>();
 
-  const toggleComplete = (problemLink: string) => {
-    const isChecked = localStorage.getItem(problemLink) || "false";
-    localStorage.setItem(problemLink, isChecked === "false" ? "true" : "false");
-  };
-
   const columns = useMemo(
     () => [
-      columnHelper.accessor("completed", {
+      columnHelper.accessor("solved", {
         header: "Status",
         cell: (info) => {
-          const isCompleted = Boolean(localStorage.getItem(info.row.original.problemLink));
           return (
             <StatusCell
-              isCompleted={isCompleted}
-              onToggle={() => toggleComplete(info.row.original.problemLink)}
-              problemLink={info.row.original.problemLink}
-              value=""
+              problemId={info.row.original.id}
+              isSolved={info.getValue()}
             />
           );
         },
@@ -34,10 +26,9 @@ export const useProblemsTable = (problems: Problem[], totalPages: number) => {
       columnHelper.accessor("name", {
         header: "Problem Name",
         cell: (info) => {
-          const isCompleted = Boolean(localStorage.getItem(info.row.original.problemLink));
           return (
             <ProblemNameCell
-              isCompleted={isCompleted}
+              isSolved={info.row.original.solved}
               problemLink={info.row.original.problemLink}
               value={info.getValue()}
             />
@@ -48,7 +39,7 @@ export const useProblemsTable = (problems: Problem[], totalPages: number) => {
         header: "Action",
         cell: (info) => (
           <ActionCell
-            isCompleted={false}
+            isSolved={info.row.original.solved}
             problemLink={info.getValue()}
             value=""
           />

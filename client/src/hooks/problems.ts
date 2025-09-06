@@ -17,21 +17,20 @@ export const useFetchProblems = () => {
     enabled: !!user,
   });
 
-
   return {
     ...problemsQuery,
   };
 };
 
 export const useToggleProblemSolved = () => {
+  const { limit, offset } = useProblemTableContext();
   const queryClient = useQueryClient();
   const api = useProblemsApi();
 
   return useMutation({
     mutationFn: api.toggleProblemSolved,
     onSuccess: () => {
-      // Invalidate and refetch solved problems
-      queryClient.invalidateQueries(["solved-problems"]);
+      queryClient.refetchQueries(["problems", limit, offset])
     },
   });
 };
