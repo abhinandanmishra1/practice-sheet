@@ -41,6 +41,8 @@ export const useProblemsTable = (problems: Problem[], totalPages: number) => {
           <ActionCell
             isSolved={info.row.original.solved}
             problemLink={info.getValue()}
+            problemId={info.row.original.id}
+            feedbackData={info.row.original.feedbackData}
             value=""
           />
         ),

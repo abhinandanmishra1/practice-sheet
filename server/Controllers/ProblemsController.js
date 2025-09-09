@@ -45,13 +45,44 @@ const fetchProblems = async (userId, offset = 0, limit = 10, sheetId = null) => 
             }
           },
           {
+            $lookup: {
+              from: "problemfeedbacks",
+              let: { problemId: "$_id" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        { $eq: ["$problem_id", "$$problemId"] },
+                        { $eq: ["$user_id", userId] }
+                      ]
+                    }
+                  }
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    bookmarked: 1,
+                    rating: 1,
+                    hint: 1,
+                    best_time_complexity: 1,
+                    createdAt: 1,
+                    updatedAt: 1
+                  }
+                }
+              ],
+              as: "feedbackData"
+            }
+          },
+          {
             $project: {
               name: 1,
               problemLink: 1,
               sheet: 1,
               id: "$_id",
               _id: 0,
-              solved: { $cond: { if: { $gt: [{ $size: "$solvedStatus" }, 0] }, then: true, else: false } }
+              solved: { $cond: { if: { $gt: [{ $size: "$solvedStatus" }, 0] }, then: true, else: false } },
+              feedbackData: { $arrayElemAt: ["$feedbackData", 0] }
             },
           },
         ],

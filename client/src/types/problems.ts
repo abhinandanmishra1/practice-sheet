@@ -1,3 +1,5 @@
+import { ProblemFeedback } from "./feedback";
+
 export interface Problem {
   name: string;
   link: string;
@@ -5,6 +7,7 @@ export interface Problem {
   problemLink: string;
   id: string;
   sheet: string;
+  feedbackData: ProblemFeedback;
 }
 
 export interface ProblemResponse {
@@ -20,6 +23,7 @@ export interface TableCellProps {
   value?: string;
   problemId?: string;
   isSolved?: boolean;
+  feedbackData?: ProblemFeedback;
 }
 
 export interface PaginationProps {

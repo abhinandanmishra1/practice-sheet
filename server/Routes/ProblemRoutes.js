@@ -16,7 +16,9 @@ router.get('/', async (req, res) => {
         const result = await fetchProblems(req.auth.userId, offset, limit, sheetId);
         return res.send(result);
     } catch (error) {
-        return res.status(500).send("Something went wrong");
+        return res.status(500).send({
+            error: error.errorResponse?.errmsg || "Something went wrong"
+        });
     }
 });
 

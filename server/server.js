@@ -22,6 +22,7 @@ app.use(clerkMiddleware());
 const problemRoutes = require("./Routes/ProblemRoutes");
 const solvedProblemsRoutes = require("./Routes/SolvedProblemsRoutes");
 const sheetRoutes = require("./Routes/SheetRoutes");
+const feedbackRoutes = require("./Routes/FeedbackRoutes");
 
 const PORT = process.env.PORT || 5001;
 
@@ -34,6 +35,7 @@ app.get("", (req, res) => {
 app.use("/problems", problemRoutes);
 app.use("/solved", solvedProblemsRoutes);
 app.use("/sheets", sheetRoutes);
+app.use("/feedback", feedbackRoutes);
 
 app.listen(PORT, async () => {
   console.log(`Server is listening on port ${PORT}`);
