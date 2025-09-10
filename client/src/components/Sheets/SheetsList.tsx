@@ -3,9 +3,10 @@ import { useSheets } from '@/hooks/useSheets';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/Loader';
+import { Sheet } from '@/types/sheets';
 
 export const SheetsList = () => {
-  const { data: sheets, isLoading, error } = useSheets();
+  const { data: sheetsResponse, isLoading, error } = useSheets();
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -22,21 +23,23 @@ export const SheetsList = () => {
     );
   }
 
+  const sheets = sheetsResponse?.data || [];
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Practice Sheets</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sheets?.map((sheet) => (
-          <Card key={sheet.id} className="p-6">
+        {sheets.map((sheet: Sheet) => (
+          <Card key={sheet._id} className="p-6">
             <h2 className="text-xl font-semibold mb-2">{sheet.name}</h2>
             <p className="text-gray-600 mb-4 line-clamp-2">{sheet.description}</p>
             <div className="flex justify-between items-center mb-4">
               <span className="text-sm text-gray-500">
-                Created: {new Date(sheet.createdAt).toLocaleDateString()}
+                Created: {new Date(sheet.createdAt || '').toLocaleDateString()}
               </span>
             </div>
             <Button 
-              onClick={() => navigate(`/sheets/${sheet.id}`)}
+              onClick={() => navigate(`/sheets/${sheet._id}`)}
               className="w-full"
             >
               View Problems
