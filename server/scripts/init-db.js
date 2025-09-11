@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import Sheet from '../Models/Sheet';
-import { Problem } from '../Models/Problems';
-import ProblemSheet from '../Models/ProblemSheet';
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const Sheet = require('../Models/Sheet');
+const { Problem } = require('../Models/Problems');
+const ProblemSheet = require('../Models/ProblemSheet');
 
 // Load environment variables
 dotenv.config();
@@ -46,11 +46,11 @@ const sampleProblems = [
 
 async function initializeDatabase() {
   try {
-    // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/practice-sheet');
+    const URI = process.env.MONGO_URI + process.env.DB_NAME;
+    console.log('Connecting to MongoDB at', URI);
+    await mongoose.connect(URI || 'mongodb://localhost:27017/practice-sheet');
     console.log('Connected to MongoDB');
 
-    // Clear existing data
     await Promise.all([
       Sheet.deleteMany({}),
       Problem.deleteMany({}),

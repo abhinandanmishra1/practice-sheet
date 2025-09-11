@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "init-db": "ts-node scripts/init-db.ts"
+    "init-db": "ts-node scripts/init-db.js"
   },
   "keywords": [],
   "author": "",
