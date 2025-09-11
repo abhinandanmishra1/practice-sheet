@@ -6,13 +6,15 @@ import { Pagination } from "./Pagination";
 import { Card } from "@/components/ui/card";
 import { Table as ShadTable, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TABLE_STYLES } from "@/constants/table";
+import { useSheetProblems } from "@/hooks/useSheets";
 
 interface TableProps {
   sheetId: string
 }
 export const Table = ({ sheetId }: TableProps) => {
-  const { data, isLoading, error } = useFetchProblems({ sheetId });
-  const problems = data?.problems || [];
+  // const { data, isLoading, error } = useFetchProblems({ sheetId });
+  const { data, isLoading, error } = useSheetProblems(sheetId);
+  const problems = data?.data || [];
   const page = data?.page || { limit: 10, total: 0 };
 
   const table = useProblemsTable(problems, page.total);

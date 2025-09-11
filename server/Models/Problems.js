@@ -13,11 +13,9 @@ const problemSchema = new mongoose.Schema({
   },
   platform: {
     type: String,
-  },
-  sheet: {
-    type: mongoose.Schema.Types.ObjectId,
-    index: true
   }
+}, {
+  timestamps: true
 });
 
 const Problem = mongoose.model("Problem", problemSchema);

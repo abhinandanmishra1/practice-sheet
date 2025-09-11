@@ -1,29 +1,50 @@
-import { useAxios } from "@/axiosClient";
-import { Sheet } from "@/types/sheets";
+import { useAxios } from '@/axiosClient';
+import { SheetResponse, SheetProblemsResponse, ProblemSheetsResponse, AddRemoveProblemResponse, Sheet } from '@/types/sheets';
 
 export const useSheetsApi = () => {
-    const axios = useAxios();
+  const axios = useAxios();
 
-    const fetchSheets = async () => {
-        try {
-            const { data } = await axios.get<Sheet[]>("/sheets");
-            return data;
-        } catch (error) {
-            throw new Error("There was some error in loading the sheets.");
-        }
-    };
+  const getSheets = async (): Promise<SheetResponse> => {
+    const response = await axios.get('/sheets');
+    return response.data;
+  };
 
-    const getSheetById = async (id: string) => {
-        try {
-            const { data } = await axios.get<Sheet>(`/sheets/${id}`);
-            return data;
-        } catch (error) {
-            throw new Error("There was some error in loading the sheet.");
-        }
-    };
+  const getSheetById = async (sheetId: string): Promise<Sheet> => {
+    const response = await axios.get(`/sheets/${sheetId}`);
+    return response.data;
+  };
 
-    return {
-        fetchSheets,
-        getSheetById
-    }
-}
+  const getSheetProblems = async (sheetId: string, limit: number, offset: number): Promise<SheetProblemsResponse> => {
+    const response = await axios.get(`/sheets/${sheetId}/problems`, {
+      params: {
+        limit,
+        offset,
+      },
+    });
+    return response.data;
+  };
+
+  const getProblemSheets = async (problemId: string): Promise<ProblemSheetsResponse> => {
+    const response = await axios.get(`/sheets/problem/${problemId}`);
+    return response.data;
+  };
+
+  const addProblemToSheet = async (sheetId: string, problemId: string): Promise<AddRemoveProblemResponse> => {
+    const response = await axios.post(`/sheets/${sheetId}/problems/${problemId}`);
+    return response.data;
+  };
+
+  const removeProblemFromSheet = async (sheetId: string, problemId: string): Promise<AddRemoveProblemResponse> => {
+    const response = await axios.delete(`/sheets/${sheetId}/problems/${problemId}`);
+    return response.data;
+  };
+
+  return {
+    getSheets,
+    getSheetById,
+    getSheetProblems,
+    getProblemSheets,
+    addProblemToSheet,
+    removeProblemFromSheet,
+  };
+};
